@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,11 +37,13 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
     
+    @CrossOrigin(origins = "*")
     @PostMapping
     private ResponseEntity<?> create(@RequestBody Customer customer){
         return ResponseEntity.ok().body(customerService.save(customer));
     }
     
+    @CrossOrigin(origins = "*")
     @GetMapping
     private ResponseEntity<?> readAll(){
         List<Customer> customers = (List)customerService.findAll();
@@ -48,6 +51,7 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
     
+    @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     private ResponseEntity<?> readOne(@PathVariable Long id){
         Optional<Customer> oCustomer = customerService.findById(id);
@@ -59,6 +63,7 @@ public class CustomerController {
         return ResponseEntity.ok(oCustomer);
     }
     
+    @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
     private ResponseEntity<?> update(@PathVariable Long id, @RequestBody Customer customer){
         Optional<Customer> oCustomer = customerService.findById(id);
@@ -76,6 +81,7 @@ public class CustomerController {
     }
     
     
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id){
         if (!customerService.findById(id).isPresent()) {

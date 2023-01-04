@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
     
+    @CrossOrigin(origins = "*")
     @PostMapping
     private ResponseEntity<?> create(@RequestBody Item item){
         try {            
@@ -44,6 +46,8 @@ public class ItemController {
         }
     }
     
+    
+    @CrossOrigin(origins = "*")
     @GetMapping
     private ResponseEntity<?> readAll(){
         List<Item> items = (List)itemService.findAll();
@@ -52,6 +56,8 @@ public class ItemController {
         return ResponseEntity.ok().body(items);
     }
     
+    
+    @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     private ResponseEntity<?> readOne(@PathVariable Long id){
         Optional<Item> oItem = itemService.findById(id);
@@ -63,6 +69,8 @@ public class ItemController {
         return ResponseEntity.ok().body(oItem);
     }
     
+    
+    @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
     private ResponseEntity<?> update(@PathVariable Long id, @RequestBody Item newItem){
         Optional<Item> oItem = itemService.findById(id);
@@ -78,6 +86,8 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(itemService.save(oItem.get()));
     }
     
+    
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id){
         if (!itemService.findById(id).isPresent()) {

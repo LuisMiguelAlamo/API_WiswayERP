@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,7 @@ public class SaleController {
     @Autowired
     private SaleService saleService;
     
+    @CrossOrigin(origins = "*")
     @PostMapping
     private ResponseEntity<?> create(@RequestBody Sale sale){
         try {
@@ -43,7 +45,7 @@ public class SaleController {
         }
     }
     
-    
+    @CrossOrigin(origins = "*")
     @GetMapping
     private ResponseEntity<?> readAll(){
         List<Sale> sales =  saleService.findAll();
@@ -53,6 +55,7 @@ public class SaleController {
     }
     
     
+    @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     private ResponseEntity<?> readOne(@PathVariable Long id){
         Optional<Sale> oSale = saleService.findById(id);
@@ -64,6 +67,31 @@ public class SaleController {
     }
     
     
+    @CrossOrigin(origins = "*")
+    @GetMapping("/{id}/items")
+    private ResponseEntity<?> getSaleItems(@PathVariable Long id){
+        Optional<Sale> oSale = saleService.findById(id);
+        
+        if (!oSale.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(oSale.get().getItems());
+    }
+    
+    
+    @CrossOrigin(origins = "*")
+    @GetMapping("/{id}/customer")
+    private ResponseEntity<?> getSaleCustomer(@PathVariable Long id){
+        Optional<Sale> oSale = saleService.findById(id);
+        
+        if (!oSale.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(oSale.get().getCustomer());
+    }
+    
+    
+    @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
     private ResponseEntity<?> update(@PathVariable Long id, @RequestBody Sale newSale){
         Optional<Sale> oSale = saleService.findById(id);
@@ -79,6 +107,7 @@ public class SaleController {
     }
     
     
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id){
         if (!saleService.findById(id).isPresent()) {
@@ -89,6 +118,8 @@ public class SaleController {
         return ResponseEntity.ok().build();  
     }
     
+    
+    @CrossOrigin(origins = "*")
     @PutMapping("/{id}/item/{id_Item}")
     private ResponseEntity<?> addSaleItem(@PathVariable Long id, @PathVariable Long id_Item){
         Optional<Sale> oSale = saleService.findById(id);
