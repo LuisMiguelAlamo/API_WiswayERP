@@ -84,12 +84,19 @@ public class CustomerController {
     @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id){
-        if (!customerService.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<Customer> oCustomer = customerService.findById(id);
+            
+            if (!oCustomer.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            customerService.deleteById(id);
+
+            return ResponseEntity.ok().body(oCustomer);    
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        
-        customerService.deleteById(id);
-        
-        return ResponseEntity.ok().build();    }
-    
+    }
 }

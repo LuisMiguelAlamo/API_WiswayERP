@@ -50,52 +50,73 @@ public class ItemController {
     @CrossOrigin(origins = "*")
     @GetMapping
     private ResponseEntity<?> readAll(){
-        List<Item> items = (List)itemService.findAll();
-        items.size();
-        
-        return ResponseEntity.ok().body(items);
+        try {
+            List<Item> items = (List)itemService.findAll();
+
+            return ResponseEntity.ok().body(items);
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     
     
     @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     private ResponseEntity<?> readOne(@PathVariable Long id){
-        Optional<Item> oItem = itemService.findById(id);
-        
-        if (!oItem.isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<Item> oItem = itemService.findById(id);
+
+            if (!oItem.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok().body(oItem);
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        
-        return ResponseEntity.ok().body(oItem);
     }
     
     
     @CrossOrigin(origins = "*")
     @PutMapping("/{id}")
     private ResponseEntity<?> update(@PathVariable Long id, @RequestBody Item newItem){
-        Optional<Item> oItem = itemService.findById(id);
-        
-        if (!oItem.isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<Item> oItem = itemService.findById(id);
+
+            if (!oItem.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            oItem.get().setName(newItem.getName());
+            oItem.get().setPrice(newItem.getPrice());
+            oItem.get().setActive(newItem.getActive());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(itemService.save(oItem.get()));
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        
-        oItem.get().setName(newItem.getName());
-        oItem.get().setPrice(newItem.getPrice());
-        oItem.get().setActive(newItem.getActive());
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(itemService.save(oItem.get()));
     }
     
     
     @CrossOrigin(origins = "*")
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id){
-        if (!itemService.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<Item> oItem = itemService.findById(id);
+            
+            if (!oItem.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            itemService.deleteById(id);
+
+            return ResponseEntity.ok().build();   
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        
-        itemService.deleteById(id);
-        
-        return ResponseEntity.ok().build();   
     }
 }

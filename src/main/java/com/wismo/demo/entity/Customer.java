@@ -5,6 +5,7 @@
  */
 package com.wismo.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @SuppressWarnings("PersistenceUnitPresent")
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Customer implements Serializable{
     
     private static final Long serialVersionUID = 1L;

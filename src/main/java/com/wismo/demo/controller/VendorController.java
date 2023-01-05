@@ -75,33 +75,37 @@ public class VendorController {
 
     @PutMapping("/{id}")
     private ResponseEntity<?> update(@PathVariable Long id, @RequestBody Vendor newVendor) {
-        Optional<Vendor> oVendor = vendorService.findById(id);
         try {
+            Optional<Vendor> oVendor = vendorService.findById(id);
+            
+            if (!oVendor.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            oVendor.get().setName(newVendor.getName());
+            oVendor.get().setAddress(newVendor.getAddress());
+            oVendor.get().setPhone(newVendor.getPhone());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(vendorService.save(oVendor.get()));
             
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
 
-        if (!oVendor.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        oVendor.get().setName(newVendor.getName());
-        oVendor.get().setAddress(newVendor.getAddress());
-        oVendor.get().setPhone(newVendor.getPhone());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(vendorService.save(oVendor.get()));
     }
 
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-            if (!vendorService.findById(id).isPresent()) {
+            Optional<Vendor> oVendor = vendorService.findById(id);
+            
+            if (!oVendor.isPresent()) {
                 return ResponseEntity.notFound().build();
             }
+            
             vendorService.deleteById(id);
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(oVendor);
 
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

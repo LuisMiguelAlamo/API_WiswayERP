@@ -5,6 +5,7 @@
  */
 package com.wismo.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +26,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-//@Table(name = "item")
 @SuppressWarnings("PersistenceUnitPresent")
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Item implements Serializable{
     
     private static final Long serialVersionUID = 1L;
@@ -42,9 +43,6 @@ public class Item implements Serializable{
     @Column(nullable = false)
     private Float price;
     
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "sale_id")
-//    private Sale sale;
     
     private Boolean active;
 }

@@ -94,8 +94,9 @@ class ApiApplicationTests {
 //            
             System.out.println("Leyendo el objeto de ventas grabado");
             List<Sale> saleAux = saleRepo.findAll();
-            saleAux.get(0).getItems().size();
-            System.out.println(saleAux.get(0).getItems().toString());
+//            saleAux.get(0).getItems().size();
+//            System.out.println(saleAux.get(0).getItems().toString());
+            System.out.println(saleAux.toString());
             
 	}
 

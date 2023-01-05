@@ -46,44 +46,67 @@ public class PurchaseController {
     
     @GetMapping
     private ResponseEntity<?> readAll(){
-        List<Purchase> purchases = (List) purchaseService.findAll();
-        
-        return ResponseEntity.ok().body(purchases);
+        try {
+            List<Purchase> purchases = (List) purchaseService.findAll();
+
+            return ResponseEntity.ok().body(purchases);
+            
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
     
     @GetMapping("/{id}")
     private ResponseEntity<?> readOne(@PathVariable Long id){
-        Optional<Purchase> oPurchase = purchaseService.findById(id);
-        
-        if (!oPurchase.isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<Purchase> oPurchase = purchaseService.findById(id);
+
+            if (!oPurchase.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok().body(oPurchase);
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        
-        return ResponseEntity.ok().body(oPurchase);
     }
     
     @PutMapping("/{id}")
     private ResponseEntity<?> update(@PathVariable Long id, @RequestBody Purchase newPurchase){
-        Optional<Purchase> oPurchase = purchaseService.findById(id);
-        
-        if (!oPurchase.isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<Purchase> oPurchase = purchaseService.findById(id);
+
+            if (!oPurchase.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            oPurchase.get().setPurchase_total(newPurchase.getPurchase_total());
+            oPurchase.get().setPurhcase_date(newPurchase.getPurhcase_date());
+
+            return ResponseEntity.ok().body(oPurchase);
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        
-        oPurchase.get().setPurchase_total(newPurchase.getPurchase_total());
-        oPurchase.get().setPurhcase_date(newPurchase.getPurhcase_date());
-        
-        return ResponseEntity.ok().body(oPurchase);
     }
     
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable Long id){
-        if (!purchaseService.findById(id).isPresent()) {
-            return ResponseEntity.notFound().build();
+        try {
+            Optional<Purchase> oPurchase = purchaseService.findById(id);
+            
+            if (!oPurchase.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            purchaseService.deleteById(id);
+
+            return ResponseEntity.ok().body(oPurchase); 
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        purchaseService.deleteById(id);
-        
-        return ResponseEntity.ok().build(); 
     }
     
 }

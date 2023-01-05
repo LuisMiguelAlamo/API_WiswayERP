@@ -1,24 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.wismo.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.sql.Date;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,26 +23,20 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "purchase")
 @SuppressWarnings("PersistenceUnitPresent")
 @JsonIgnoreProperties("hibernateLazyInitializer")
-public class Purchase implements Serializable{
-    
+public class Product implements Serializable{
     private static final Long serialVersionUID = 1L;
     
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id") // para referenciar el JoinColum usado en @OneToOne y solución de problemas
     @Id
     private Long id;
     
-    private Float purchase_total;
+    String name;
     
-    private Date purhcase_date;
+    Float price;
     
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Vendor vendor;
-    
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Product> products;
+    Boolean active;
     
 }

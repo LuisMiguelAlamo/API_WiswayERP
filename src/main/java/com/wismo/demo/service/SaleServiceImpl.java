@@ -31,10 +31,10 @@ public class SaleServiceImpl implements SaleService{
     private ItemRepository itemRepo;
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public List<Sale> findAll() {
         List<Sale> saleAux = saleRepo.findAll();
-        saleAux.get(0).getItems().size();
+        saleAux.size();
         return saleAux;
     }
 
